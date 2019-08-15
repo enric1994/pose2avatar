@@ -8,7 +8,7 @@ services:
     working_dir: /pose2char
     build:
       context: ../
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.pose
 
 # Setup environment variables:
     environment:
@@ -39,14 +39,39 @@ services:
 # If installed, you can start Jupyter Notebook every time you run the container
     #command: jupyter notebook --allow-root
 
-# Start a Tensorboard on localhost:6006 that process the logs folder
-  # tensorboard:
-  #   image: tensorflow/tensorflow:latest-cpu
-  #   container_name: tensorboard
-  #   working_dir: /logs
-  #   ports:
-  #    - "6006:6006"
-  #   volumes:
-  #     - ../logs:/logs
-  #   runtime: nvidia
-  #   command: tensorboard --logdir /logs
+blender:
+    image: blender
+    container_name: blender
+    working_dir: /blender
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.blender
+
+# Setup environment variables:
+    environment:
+      - PYTHONPATH=/blender
+      # Uncomment the following line to plot images on Linux
+      - DISPLAY=unix$DISPLAY
+      # Set a password to your Jupyter Notebook
+      #- PASSWORD=testpass
+      
+# Setup the ports you want to expose:
+    # ports:
+    # Jupyter port
+      #- "8888:8888"
+
+# Setup the volumes you want to share:    
+    volumes:
+      - ../:/pose2char
+      #Share the webcam with the container
+      #- /dev/video0:/dev/video0
+      # Uncomment the following line to plot images on Linux
+      - /tmp/.X11-unix:/tmp/.X11-unix
+
+# Uncomment the following line to use an NVIDIA GPU (requires nvidia-docker)
+    runtime: nvidia
+
+# By default this container stay alive without running any command 
+    command: tail /dev/null -f
+# If installed, you can start Jupyter Notebook every time you run the container
+    #command: jupyter notebook --allow-root

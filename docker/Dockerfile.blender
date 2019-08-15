@@ -1,0 +1,3 @@
+FROM amlinux/blender-python:latest
+
+WORKDIR /data
