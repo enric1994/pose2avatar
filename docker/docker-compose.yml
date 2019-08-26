@@ -39,17 +39,17 @@ services:
 # If installed, you can start Jupyter Notebook every time you run the container
     #command: jupyter notebook --allow-root
 
-blender:
+  blender:
     image: blender
     container_name: blender
-    working_dir: /blender
+    working_dir: /pose2char
     build:
       context: ../
       dockerfile: docker/Dockerfile.blender
 
 # Setup environment variables:
     environment:
-      - PYTHONPATH=/blender
+      - PYTHONPATH=/pose2char
       # Uncomment the following line to plot images on Linux
       - DISPLAY=unix$DISPLAY
       # Set a password to your Jupyter Notebook

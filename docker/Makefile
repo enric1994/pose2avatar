@@ -1,7 +1,9 @@
 run:
 	@docker-compose up -d --build
-dev:
-	@docker exec -it pose2char bash
+blender:
+	@docker-compose up -d blender
+dev-blender:
+	@docker exec -it blender bash
 build:
 	@docker-compose build
 down:
