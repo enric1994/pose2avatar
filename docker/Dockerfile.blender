@@ -1,3 +1,7 @@
 FROM amlinux/blender-python:latest
 
+RUN apt update -y
+RUN apt install python3-pip
+RUN pip install numpy
+
 WORKDIR /data
