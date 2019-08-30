@@ -1,3 +1,5 @@
+#./build/examples/openpose/openpose.bin --video /pose2char/data/test_me.mp4 --write_video /pose2char/output/test_me_pose.avi --write_json /pose2char/data/keypoints/test_me/
+
 version: '2.3'
 
 services:
