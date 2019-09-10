@@ -66,3 +66,19 @@ def set_camera(tx, ty, tz, rx, ry, rz):
 	scene.camera.location.x = tx
 	scene.camera.location.y = ty
 	scene.camera.location.z = tz
+
+def get_positions_at_frame(keypoints_path, frame):
+
+
+	for r, d, f in os.walk(keypoints_path):
+		# import pdb;pdb.set_trace()
+		f.sort()
+
+		with open(os.path.join(keypoints_path,f[frame]), 'r') as f:
+			pose_dict = json.load(f)
+	# import pdb;pdb.set_trace()
+	return pose_dict['people'][0]['pose_keypoints_2d']
+
+
+def save_project(path='/pose2char/test.blend'):
+	bpy.ops.wm.save_as_mainfile(filepath=path)
