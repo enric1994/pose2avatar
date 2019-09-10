@@ -5,22 +5,23 @@ import numpy as np
 import math
 import os
 
-experiment = 'claudia.0.3.0.0'
+experiment = 'claudia.0.3.2.0'
 
 keypoints_path='/pose2char/data/keypoints/enric_full'
 total_frames= blenderutils.get_total_frames(keypoints_path)
-bpy.ops.wm.open_mainfile(filepath="/pose2char/blender/claudia.0.2.0.blend")
+bpy.ops.wm.open_mainfile(filepath="/pose2char/blender/claudia.0.3.2.blend")
 
 
 bones = {
 	0:'C_Head_0',
-	1:'C_Root_1',
+	1:'C_Neck_1',
 	2:'C_Shoulder_R_2',
 	3:'C_Arm_R_3',
 	4:'C_Hand_R_4',
 	5:'C_Shoulder_L_5',
 	6:'C_Arm_L_6',
 	7:'C_Hand_L_7',
+	8:'C_Root_8',
 	9:'C_Hip_R_9',
 	10:'C_Knee_R_10',
 	11:'C_Ankle_R_11',
@@ -44,7 +45,7 @@ def animate_bones(bones):
 			obj = bpy.context.scene.objects.active
 
 			empty = bpy.data.objects[bones[bone]]
-			empty.location = positions[bone*3], positions[bone*3 + 1], positions[bone*3 + 2]
+			empty.location = positions[bone*3], positions[bone*3 + 2], -positions[bone*3 + 1]
 			# print(empty.location)
 		
 		obj.keyframe_insert(data_path="location",index = -1)
