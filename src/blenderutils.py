@@ -77,7 +77,7 @@ def get_positions_at_frame(keypoints_path, frame):
 		with open(os.path.join(keypoints_path,f[frame]), 'r') as f:
 			pose_dict = json.load(f)
 	# import pdb;pdb.set_trace()
-	return pose_dict['people'][0]['pose_keypoints_2d']
+	return pose_dict['bodies'][0]['joints26']
 
 
 def save_project(path='/pose2char/test.blend'):
