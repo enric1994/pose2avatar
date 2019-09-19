@@ -1,7 +1,7 @@
 FROM amlinux/blender-python:latest
 
 RUN apt update -y
-RUN apt install python3-pip -y
+RUN apt install python3-pip ffmpeg -y
 RUN pip3 install numpy
 
 WORKDIR /data

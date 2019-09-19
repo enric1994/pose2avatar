@@ -82,3 +82,6 @@ def get_positions_at_frame(keypoints_path, frame):
 
 def save_project(path='/pose2char/test.blend'):
 	bpy.ops.wm.save_as_mainfile(filepath=path)
+
+def gen_video(experiment):
+		os.system("ffmpeg -y -framerate 30 -i /pose2char/output/{}/%06d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p /pose2char/videos/{}.mp4".format(experiment,experiment))

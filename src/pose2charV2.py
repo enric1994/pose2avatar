@@ -5,7 +5,7 @@ import numpy as np
 import math
 import os
 
-experiment = 'claudia.2.4.2.0'
+experiment = 'claudia.2.4.2.2'
 
 keypoints_path='/pose2char/data/keypoints/enric_full'
 total_frames= blenderutils.get_total_frames(keypoints_path)
@@ -43,8 +43,14 @@ bones = {
 
 
 def animate_bones(bones):
+
+	# bpy.ops.group.create(name="CubeXGroup")
+ 
+	# group = bpy.data.groups['CubeXGroup']
+
+
 	# positions =  []
-	for frame in range(0,20): #total_frames
+	for frame in range(0,total_frames): #total_frames
 		# print(frame)
 		bpy.context.scene.frame_set(frame)
 		try:
@@ -63,7 +69,7 @@ def animate_bones(bones):
 			bpy.context.scene.frame_current = frame
 			bpy.context.scene.render.image_settings.file_format = 'PNG'
 			os.makedirs('/pose2char/output/{}'.format(experiment), exist_ok=True)
-			bpy.context.scene.render.filepath = "/pose2char/output/{}/".format(experiment) + str(frame)
+			bpy.context.scene.render.filepath = "/pose2char/output/{}/{}".format(experiment, str(frame).zfill(6))
 			bpy.ops.render.render(write_still=True)
 		except:
 			pass
@@ -92,7 +98,7 @@ def animate_bones(bones):
 # obj = bpy.context.scene.objects.active
 
 animate_bones(bones)
-
+blenderutils.gen_video(experiment)
 # blenderutils.save_project()
 
 # bpy.ops.wm.save_as_mainfile(filepath='/pose2char/test.blend')
