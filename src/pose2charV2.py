@@ -5,28 +5,28 @@ import numpy as np
 import math
 import os
 
-experiment = 'claudia.2.1r_foot.0.6'
+experiment = 'claudia.2.4.2.0'
 
-keypoints_path='/pose2char/data/keypoints/3DPose'
+keypoints_path='/pose2char/data/keypoints/enric_full'
 total_frames= blenderutils.get_total_frames(keypoints_path)
-bpy.ops.wm.open_mainfile(filepath="/pose2char/blender/claudia.2.1r_foot.0.blend")
+bpy.ops.wm.open_mainfile(filepath="/pose2char/blender/claudia.2.4.2.blend")
 
 
 bones = {
-    #  0:  "Nose",
-    #  1:  "Neck",
-    #  2:  "RShoulder",
-    #  3:  "RElbow",
-    #  4:  "RWrist",
-    #  5:  "LShoulder",
-    #  6:  "LElbow",
-    #  7:  "LWrist",
+     0:  "Nose",
+     1:  "Neck",
+     2:  "RShoulder",
+     3:  "RElbow",
+     4:  "RWrist",
+     5:  "LShoulder",
+     6:  "LElbow",
+     7:  "LWrist",
      8:  "MidHip",
-    #  9:  "RHip",
-    #  10: "RKnee",
+     9:  "RHip",
+     10: "RKnee",
      11: "RAnkle",
-    #  12: "LHip",
-    #  13: "LKnee",
+     12: "LHip",
+     13: "LKnee",
      14: "LAnkle",
     #  15: "REye",
     #  16: "LEye",
@@ -48,14 +48,14 @@ def animate_bones(bones):
 		# print(frame)
 		bpy.context.scene.frame_set(frame)
 		try:
-			positions = np.array(blenderutils.get_positions_at_frame(keypoints_path, frame))/100
+			positions = np.array(blenderutils.get_positions_at_frame(keypoints_path, frame))/70
 			for bone in bones:
 				bpy.ops.object.mode_set(mode="OBJECT")
 				bpy.data.objects[bones[bone]].select = True
 				obj = bpy.context.scene.objects.active
 
 				empty = bpy.data.objects[bones[bone]]
-				empty.location = positions[bone*4], positions[bone*4 + 2], -positions[bone*4 + 1]
+				empty.location = positions[bone*3], 0, -positions[bone*3 + 1]
 				# print(empty.location)
 			
 			obj.keyframe_insert(data_path="location",index = -1)
