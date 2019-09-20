@@ -8,13 +8,14 @@ import math
 import os
 from tqdm import tqdm
 
-version = '3.0.0'
+version = '3.0'
+minor = '1'
 model = 'claudia'
 keypoints = 'enric_full'
 
 base_path = '/pose2avatar'
 
-experiment = ('{}.{}.{}'.format(keypoints, model, version))
+experiment = ('{}.{}.{}.{}'.format(keypoints, model, version, minor))
 keypoints_path = os.path.join(base_path, 'data/keypoints', keypoints)
 project_path = os.path.join(base_path,'blender/{}.{}.blend'.format(model, version))
 bpy.ops.wm.open_mainfile(filepath=project_path)
