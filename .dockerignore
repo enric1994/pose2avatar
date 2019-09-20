@@ -1,0 +1,10 @@
+data/
+blender/
+src/
+
+*.json
+*.avi
+*.mov
+*.mp4
+*.png
+*.pyc

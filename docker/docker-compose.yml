@@ -1,79 +1,36 @@
-#./build/examples/openpose/openpose.bin --video /pose2char/data/test_me.mp4 --write_video /pose2char/output/test_me_pose.avi --write_json /pose2char/data/keypoints/test_me/
+#./build/examples/openpose/openpose.bin --video /openpose/project/data/enric_hand.mp4 --write_video /openpose/project/output/enric_hand.avi --write_json /openpose/project/data/keypoints/enric_hand/ --face --hand --hand_scale_number 6 --hand_scale_range 0.4
 
 version: '2.3'
 
 services:
 
-  pose2char:
-    image: pose2char
-    container_name: pose2char
-    working_dir: /pose2char
+  openpose:
+    image: openpose
+    container_name: openpose
+    working_dir: /openpose
     build:
       context: ../
-      dockerfile: docker/Dockerfile.pose
-
-# Setup environment variables:
+      dockerfile: docker/Dockerfile.openpose
     environment:
-      - PYTHONPATH=/pose2char
-      # Uncomment the following line to plot images on Linux
       - DISPLAY=unix$DISPLAY
-      # Set a password to your Jupyter Notebook
-      #- PASSWORD=testpass
-      
-# Setup the ports you want to expose:
-    # ports:
-    # Jupyter port
-      #- "8888:8888"
-
-# Setup the volumes you want to share:    
     volumes:
-      - ../:/pose2char
-      #Share the webcam with the container
-      #- /dev/video0:/dev/video0
-      # Uncomment the following line to plot images on Linux
+      - ../:/openpose/project
       - /tmp/.X11-unix:/tmp/.X11-unix
-
-# Uncomment the following line to use an NVIDIA GPU (requires nvidia-docker)
     runtime: nvidia
-
-# By default this container stay alive without running any command 
     command: tail /dev/null -f
-# If installed, you can start Jupyter Notebook every time you run the container
-    #command: jupyter notebook --allow-root
 
-  blender:
-    image: blender
-    container_name: blender
-    working_dir: /pose2char
+  pose2avatar:
+    image: pose2avatar
+    container_name: pose2avatar
+    working_dir: /pose2avatar
     build:
       context: ../
-      dockerfile: docker/Dockerfile.blender
-
-# Setup environment variables:
+      dockerfile: docker/Dockerfile.pose2avatar
     environment:
-      - PYTHONPATH=/pose2char
-      # Uncomment the following line to plot images on Linux
+      - PYTHONPATH=/pose2avatar
       - DISPLAY=unix$DISPLAY
-      # Set a password to your Jupyter Notebook
-      #- PASSWORD=testpass
-      
-# Setup the ports you want to expose:
-    # ports:
-    # Jupyter port
-      #- "8888:8888"
-
-# Setup the volumes you want to share:    
     volumes:
-      - ../:/pose2char
-      #Share the webcam with the container
-      #- /dev/video0:/dev/video0
-      # Uncomment the following line to plot images on Linux
+      - ../:/pose2avatar
       - /tmp/.X11-unix:/tmp/.X11-unix
-
-# Uncomment the following line to use an NVIDIA GPU (requires nvidia-docker)
     runtime: nvidia
-
-# By default this container stay alive without running any command 
     command: tail /dev/null -f
-# If installed, you can start Jupyter Notebook every time you run the container
-    #command: jupyter notebook --allow-root
