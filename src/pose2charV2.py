@@ -5,10 +5,10 @@ import numpy as np
 import math
 import os
 
-experiment = 'claudia.2.4.2.2'
+experiment = 'claudia.2.4.2.5'
 
 keypoints_path='/pose2char/data/keypoints/enric_full'
-total_frames= blenderutils.get_total_frames(keypoints_path)
+total_frames = blenderutils.get_total_frames(keypoints_path)
 bpy.ops.wm.open_mainfile(filepath="/pose2char/blender/claudia.2.4.2.blend")
 
 
@@ -51,26 +51,27 @@ def animate_bones(bones):
 
 	# positions =  []
 	for frame in range(0,total_frames): #total_frames
+		frame *=4
 		# print(frame)
 		bpy.context.scene.frame_set(frame)
 		try:
 			positions = np.array(blenderutils.get_positions_at_frame(keypoints_path, frame))/70
 			for bone in bones:
 				bpy.ops.object.mode_set(mode="OBJECT")
-				bpy.data.objects[bones[bone]].select = True
-				obj = bpy.context.scene.objects.active
+				# bpy.data.objects[bones[bone]].select = True
+				obj = bpy.context.scene.objects[bones[bone]]
 
 				empty = bpy.data.objects[bones[bone]]
 				empty.location = positions[bone*3], 0, -positions[bone*3 + 1]
 				# print(empty.location)
 			
-			obj.keyframe_insert(data_path="location",index = -1)
+				obj.keyframe_insert(data_path="location",index = -1, frame=frame)
 
-			bpy.context.scene.frame_current = frame
-			bpy.context.scene.render.image_settings.file_format = 'PNG'
-			os.makedirs('/pose2char/output/{}'.format(experiment), exist_ok=True)
-			bpy.context.scene.render.filepath = "/pose2char/output/{}/{}".format(experiment, str(frame).zfill(6))
-			bpy.ops.render.render(write_still=True)
+			# bpy.context.scene.frame_current = frame
+			# bpy.context.scene.render.image_settings.file_format = 'PNG'
+			# os.makedirs('/pose2char/output/{}'.format(experiment), exist_ok=True)
+			# bpy.context.scene.render.filepath = "/pose2char/output/{}/{}".format(experiment, str(frame).zfill(6))
+			# bpy.ops.render.render(write_still=True)
 		except:
 			pass
 		# import pdb;pdb.set_trace()
@@ -98,8 +99,16 @@ def animate_bones(bones):
 # obj = bpy.context.scene.objects.active
 
 animate_bones(bones)
+
+for i in range(0,total_frames):
+	bpy.context.scene.frame_current = i
+	bpy.context.scene.render.image_settings.file_format = 'PNG'
+	os.makedirs('/pose2char/output/{}'.format(experiment), exist_ok=True)
+	bpy.context.scene.render.filepath = "/pose2char/output/{}/{}".format(experiment, str(i).zfill(6))
+	bpy.ops.render.render(write_still=True)
+
 blenderutils.gen_video(experiment)
-# blenderutils.save_project()
+blenderutils.save_project()
 
 # bpy.ops.wm.save_as_mainfile(filepath='/pose2char/test.blend')
 

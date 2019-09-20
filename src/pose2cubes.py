@@ -72,5 +72,7 @@ main()
 for i in range(0,total_frames):
 		bpy.context.scene.frame_current = i
 		bpy.context.scene.render.image_settings.file_format = 'PNG'
-		bpy.context.scene.render.filepath = "/pose2char/output/" + str(i)
+		bpy.context.scene.render.filepath = "/pose2char/output/test_me" + str(i)
 		bpy.ops.render.render(write_still=True) # render still
+
+blenderutils.save_project()
