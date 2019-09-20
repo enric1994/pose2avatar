@@ -1,4 +1,4 @@
-!#/usr/bin/python3
+#!/usr/bin/env python3
 
 import bpy
 import json
@@ -24,11 +24,5 @@ def get_bones_positions_at_frame(keypoints_path, frame):
 def save_project(path='/pose2avatar/test.blend'):
 	bpy.ops.wm.save_as_mainfile(filepath=path)
 
-def gen_video(experiment, input_images, output_video):
-		os.system('ffmpeg -y -framerate 30 -i {}/%06d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p {}'.format(input_images,experiment, output_video))
-
-def render(bpy):
-	text_trap = io.StringIO()
-	sys.stdout = text_trap
-	bpy.ops.render.render(write_still=True)
-	sys.stdout = sys.__stdout__
+def gen_video(input_images, output_video):
+		os.system('ffmpeg -y -framerate 30 -i {}/%06d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p {}'.format(input_images, output_video))

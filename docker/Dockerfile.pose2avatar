@@ -1,7 +1,7 @@
-FROM amlinux/blender-python:latest
+FROM enric1994/blender-python
 
 RUN apt update -y
 RUN apt install python3-pip ffmpeg -y
-RUN pip3 install numpy
+RUN pip3 install numpy tqdm
 
 WORKDIR /data

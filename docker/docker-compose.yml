@@ -1,4 +1,4 @@
-#./build/examples/openpose/openpose.bin --video /openpose/project/data/enric_hand.mp4 --write_video /openpose/project/output/enric_hand.avi --write_json /openpose/project/data/keypoints/enric_hand/ --face --hand --hand_scale_number 6 --hand_scale_range 0.4
+#./build/examples/openpose/openpose.bin --video /openpose/project/data/enric_hand.mp4 --write_json /openpose/project/data/keypoints/test/ --face --hand --hand_scale_number 6 --hand_scale_range 0.4
 
 version: '2.3'
 

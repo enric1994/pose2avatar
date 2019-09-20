@@ -1,4 +1,4 @@
-!#/usr/bin/python3
+#!/usr/bin/env python3
 
 import bpy
 from random import randint,random
@@ -6,18 +6,17 @@ import src.utils as utils
 import numpy as np
 import math
 import os
-import tqdm
+from tqdm import tqdm
 
 version = '3.0.0'
 model = 'claudia'
 keypoints = 'enric_full'
 
 base_path = '/pose2avatar'
-os.path.join(,)
 
 experiment = ('{}.{}.{}'.format(keypoints, model, version))
 keypoints_path = os.path.join(base_path, 'data/keypoints', keypoints)
-project_path = os.path.join(base_path,'blender/{}.blend'.format(experiment))
+project_path = os.path.join(base_path,'blender/{}.{}.blend'.format(model, version))
 bpy.ops.wm.open_mainfile(filepath=project_path)
 
 pose_bones = {
@@ -50,35 +49,40 @@ pose_bones = {
 
 total_frames = utils.get_total_frames(keypoints_path)
 
+print('''
+Starting experiment: {}
+Frames: {}
+'''.format(experiment, total_frames)
+)
 
 def main():
 
-	for frame in tqdm(range(0,total_frames)):
+	print('Reading pose from JSON:')
+	for frame in tqdm(range(0, int(total_frames / 4))):
 		frame *=4
 		bpy.context.scene.frame_set(frame)
-		try:
-			positions = np.array(utils.get_bones_positions_at_frame(keypoints_path, frame))/70
-			for bone in pose_bones:
-				bpy.ops.object.mode_set(mode='OBJECT')
-				obj = bpy.context.scene.objects[pose_bones[bone]]
-				empty = bpy.data.objects[pose_bones[bone]]
-				empty.location = positions[bone*3], 0, -positions[bone*3 + 1]
-				obj.keyframe_insert(data_path='location',index = -1, frame=frame)
+		positions = np.array(utils.get_bones_positions_at_frame(keypoints_path, frame))/70
+		for bone in pose_bones:
+			bpy.ops.object.mode_set(mode='OBJECT')
+			obj = bpy.context.scene.objects[pose_bones[bone]]
+			empty = bpy.data.objects[pose_bones[bone]]
+			empty.location = positions[bone*3], 0, -positions[bone*3 + 1]
+			obj.keyframe_insert(data_path='location',index = -1, frame=frame)
 
-		except:
-			pass
-
+	print('Rendering frames...')
 	for i in tqdm(range(0,total_frames)):
 		bpy.context.scene.frame_current = i
 		bpy.context.scene.render.image_settings.file_format = 'PNG'
-		os.makedirs(os.join(base_path, 'data', 'output', experiment), exist_ok=True)
-		bpy.context.scene.render.filepath = os.join(base_path, 'data', 'output', experiment, str(i).zfill(6))
-		utils.render(bpy)
+		os.makedirs(os.path.join(base_path, 'data', 'output', experiment), exist_ok=True)
+		bpy.context.scene.render.filepath = os.path.join(base_path, 'data', 'output', experiment, str(i).zfill(6))
+		bpy.ops.render.render(write_still=True)
 
-	utils.gen_video(experiment,
-		os.join(base_path, 'data', 'output',experiment),
-		os.join(base_path, 'data', 'videos','{}.{}'.format(experiment, 'mp4'))
+	print('Rendering video...')
+	utils.gen_video(
+		os.path.join(base_path, 'data', 'output',experiment),
+		os.path.join(base_path, 'data', 'videos','{}.{}'.format(experiment, 'mp4'))
 	)
+
 	utils.save_project()
 
 
