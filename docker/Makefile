@@ -8,7 +8,7 @@ openpose:
 	@docker-compose up -d openpose
 dev-openpose:
 	@docker exec -it openpose bash
-build:
+build-all:
 	@docker-compose build
 down:
 	@docker-compose down -v

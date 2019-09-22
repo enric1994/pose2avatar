@@ -2,14 +2,41 @@
 
 import bpy
 from random import randint,random
-import src.utils as utils
+import utils as utils
 import numpy as np
 import math
 import os
 from tqdm import tqdm
 
-version = '3.0'
-minor = '1'
+
+# import pdb;pdb.set_trace()
+
+# # # bpy.context.user_preferences.system.compute_device_type = 'CUDA'
+# # # bpy.context.user_preferences.system.compute_device = 'CUDA_0'
+# # # bpy.ops.render.render(True)
+
+###
+bpy.context.scene.render.engine = 'CYCLES'
+
+bpy.context.scene.cycles.device = 'GPU'
+
+prefs = bpy.context.preferences.addons['cycles'].preferences
+devices = prefs.get_devices()
+
+prefs.compute_device_type = 'CUDA'
+devices[0][0].use = True                           # enable first GPU
+###
+
+# bpy.context.preferences.addons['cycles'].preferences.compute_device_type = 'CUDA'
+# bpy.context.preferences.addons['cycles'].preferences.devices[0].use = True
+
+# prefs = bpy.context.user_preferences.addons['cycles'].preferences
+# prefs.compute_device_type = 'CUDA'
+# prefs.compute_device = 'CUDA_0'
+# import pdb;pdb.set_trace()
+
+version = '4.0'
+minor = '0'
 model = 'claudia'
 keypoints = 'enric_full'
 
@@ -48,7 +75,8 @@ pose_bones = {
 	#  24: 'RHeel'
 }
 
-total_frames = utils.get_total_frames(keypoints_path)
+total_frames = 20
+#utils.get_total_frames(keypoints_path)
 
 print('''
 Starting experiment: {}
