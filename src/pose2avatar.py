@@ -2,14 +2,14 @@
 
 import bpy
 from random import randint,random
-import src.utils as utils
+import utils as utils
 import numpy as np
 import math
 import os
 from tqdm import tqdm
 
 version = '3.0'
-minor = '1'
+minor = '6'
 model = 'claudia'
 keypoints = 'enric_full'
 
@@ -19,6 +19,9 @@ experiment = ('{}.{}.{}.{}'.format(keypoints, model, version, minor))
 keypoints_path = os.path.join(base_path, 'data/keypoints', keypoints)
 project_path = os.path.join(base_path,'blender/{}.{}.blend'.format(model, version))
 bpy.ops.wm.open_mainfile(filepath=project_path)
+
+downsample_ratio = 4
+keypoints_resize = 70
 
 pose_bones = {
 	 0:  'Nose',
@@ -59,10 +62,10 @@ Frames: {}
 def main():
 
 	print('Reading pose from JSON:')
-	for frame in tqdm(range(0, int(total_frames / 4))):
+	for frame in tqdm(range(0, int(total_frames / downsample_ratio))):
 		frame *=4
 		bpy.context.scene.frame_set(frame)
-		positions = np.array(utils.get_bones_positions_at_frame(keypoints_path, frame))/70
+		positions = np.array(utils.get_bones_positions_at_frame(keypoints_path, frame))/keypoints_resize
 		for bone in pose_bones:
 			bpy.ops.object.mode_set(mode='OBJECT')
 			obj = bpy.context.scene.objects[pose_bones[bone]]

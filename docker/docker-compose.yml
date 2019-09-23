@@ -27,7 +27,6 @@ services:
       context: ../
       dockerfile: docker/Dockerfile.pose2avatar
     environment:
-      - PYTHONPATH=/pose2avatar
       - DISPLAY=unix$DISPLAY
     volumes:
       - ../:/pose2avatar
