@@ -3,15 +3,16 @@
 import bpy
 from random import randint,random
 import utils as utils
+from bones_ref import *
 import numpy as np
 import math
 import os
 from tqdm import tqdm
 
-version = '3.0'
-minor = '6'
+version = '4.0'
+minor = '1'
 model = 'claudia'
-keypoints = 'enric_full'
+keypoints = 'enric_hand'
 
 base_path = '/pose2avatar'
 
@@ -23,35 +24,9 @@ bpy.ops.wm.open_mainfile(filepath=project_path)
 downsample_ratio = 4
 keypoints_resize = 70
 
-pose_bones = {
-	 0:  'Nose',
-	 1:  'Neck',
-	 2:  'RShoulder',
-	 3:  'RElbow',
-	 4:  'RWrist',
-	 5:  'LShoulder',
-	 6:  'LElbow',
-	 7:  'LWrist',
-	 8:  'MidHip',
-	 9:  'RHip',
-	 10: 'RKnee',
-	 11: 'RAnkle',
-	 12: 'LHip',
-	 13: 'LKnee',
-	 14: 'LAnkle',
-	#  15: 'REye',
-	#  16: 'LEye',
-	#  17: 'REar',
-	#  18: 'LEar',
-	#  19: 'LBigToe',
-	#  20: 'LSmallToe',
-	#  21: 'LHeel',
-	#  22: 'RBigToe',
-	#  23: 'RSmallToe',
-	#  24: 'RHeel'
-}
 
-total_frames = utils.get_total_frames(keypoints_path)
+total_frames = 10
+#utils.get_total_frames(keypoints_path)
 
 print('''
 Starting experiment: {}
@@ -65,13 +40,23 @@ def main():
 	for frame in tqdm(range(0, int(total_frames / downsample_ratio))):
 		frame *=4
 		bpy.context.scene.frame_set(frame)
-		positions = np.array(utils.get_bones_positions_at_frame(keypoints_path, frame))/keypoints_resize
+		pose_positions = np.array(utils.get_pose_bones_positions_at_frame(keypoints_path, frame))/keypoints_resize
+		hand_positions = np.array(utils.get_hand_bones_positions_at_frame(keypoints_path, frame))/keypoints_resize
+
 		for bone in pose_bones:
 			bpy.ops.object.mode_set(mode='OBJECT')
 			obj = bpy.context.scene.objects[pose_bones[bone]]
 			empty = bpy.data.objects[pose_bones[bone]]
-			empty.location = positions[bone*3], 0, -positions[bone*3 + 1]
+			empty.location = pose_positions[bone*3], 0, -pose_positions[bone*3 + 1]
 			obj.keyframe_insert(data_path='location',index = -1, frame=frame)
+		
+		for bone in right_hand_bones:
+			bpy.ops.object.mode_set(mode='OBJECT')
+			obj = bpy.context.scene.objects[right_hand_bones[bone]]
+			empty = bpy.data.objects[right_hand_bones[bone]]
+			empty.location = hand_positions[bone*3], 0, -hand_positions[bone*3 + 1]
+			obj.keyframe_insert(data_path='location',index = -1, frame=frame)
+
 
 	print('Rendering frames...')
 	for i in tqdm(range(0,total_frames)):

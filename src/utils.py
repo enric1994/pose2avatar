@@ -14,12 +14,19 @@ def get_total_frames(path):
 	file_count = next(os.walk(path))[2]
 	return len(file_count)
 
-def get_bones_positions_at_frame(keypoints_path, frame):
+def get_pose_bones_positions_at_frame(keypoints_path, frame):
 	for r, d, f in os.walk(keypoints_path):
 		f.sort()
 		with open(os.path.join(keypoints_path,f[frame]), 'r') as f:
 			pose_dict = json.load(f)
 	return pose_dict['people'][0]['pose_keypoints_2d']
+
+def get_hand_bones_positions_at_frame(keypoints_path, frame):
+	for r, d, f in os.walk(keypoints_path):
+		f.sort()
+		with open(os.path.join(keypoints_path,f[frame]), 'r') as f:
+			pose_dict = json.load(f)
+	return pose_dict['people'][0]['hand_right_keypoints_2d']
 
 def save_project(path='/pose2avatar/test.blend'):
 	bpy.ops.wm.save_as_mainfile(filepath=path)
