@@ -26,7 +26,7 @@ def get_hand_bones_positions_at_frame(keypoints_path, frame):
 		f.sort()
 		with open(os.path.join(keypoints_path,f[frame]), 'r') as f:
 			pose_dict = json.load(f)
-	return pose_dict['people'][0]['hand_right_keypoints_2d']
+	return pose_dict['people'][0]['hand_left_keypoints_2d'], pose_dict['people'][0]['hand_right_keypoints_2d']
 
 def save_project(path='/pose2avatar/test.blend'):
 	bpy.ops.wm.save_as_mainfile(filepath=path)
