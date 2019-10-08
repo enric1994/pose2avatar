@@ -1,32 +1,25 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
-MAINTAINER Richard Berger <richard.berger@outlook.com>
+RUN apt-get update && apt-get install -y wget sudo
 
-RUN apt-get update && apt-get install -y wget sudo software-properties-common
-
-RUN add-apt-repository ppa:deadsnakes/ppa -y
-RUN apt-get update -y
-
-RUN apt-get install -y python3.7
-
-RUN wget http://download.blender.org/source/blender-2.80.tar.gz -O /tmp/blender-2.80.tar.gz && \
-    cd /tmp && tar xvzf /tmp/blender-2.80.tar.gz && \
-    rm /tmp/blender-2.80.tar.gz && \
-    /tmp/blender-2.80/build_files/build_environment/install_deps.sh --no-confirm --with-all && \
+RUN wget http://download.blender.org/source/blender-2.79b.tar.gz -O /tmp/blender-2.79b.tar.gz && \
+    cd /tmp && tar xvzf /tmp/blender-2.79b.tar.gz && \
+    rm /tmp/blender-2.79b.tar.gz && \
+    /tmp/blender-2.79b/build_files/build_environment/install_deps.sh --no-confirm --with-all && \
     mkdir /tmp/build && \
     cd /tmp/build &&  \
-    cmake ../blender-2.80 -DWITH_PYTHON_INSTALL=OFF \
+    cmake ../blender-2.79b -DWITH_PYTHON_INSTALL=OFF \
                           -DWITH_PLAYER=OFF \
                           -DWITH_PYTHON_MODULE=ON \
                           -DWITH_CODEC_SNDFILE=ON \
-                          -DPYTHON_VERSION=3.7 \
+                          -DPYTHON_VERSION=3.5 \
                           -DWITH_OPENCOLORIO=ON \
                           -DOPENCOLORIO_ROOT_DIR=/opt/lib/ocio \
                           -DWITH_OPENIMAGEIO=ON \
                           -DOPENIMAGEIO_ROOT_DIR=/opt/lib/oiio \
                           -DWITH_CYCLES_OSL=ON \
                           -DWITH_LLVM=ON \
-                          -DLLVM_VERSION=6.0 \
+                          -DLLVM_VERSION=3.4 \
                           -DOSL_ROOT_DIR=/opt/lib/osl \
                           -DLLVM_ROOT_DIR=/opt/lib/llvm \
                           -DLLVM_STATIC=ON \
@@ -40,18 +33,17 @@ RUN wget http://download.blender.org/source/blender-2.80.tar.gz -O /tmp/blender-
                           -DWITH_ALEMBIC=ON \
                           -DALEMBIC_ROOT_DIR=/opt/lib/alembic \
                           -DWITH_CODEC_FFMPEG=ON \
-                          -DFFMPEG_LIBRARIES='avformat;avcodec;avutil;avdevice;swscale;swresample;lzma;rt;theoradec;theora;theoraenc;vorbisenc;vorbisfile;vorbis;ogg;xvidcore;vpx;mp3lame;x264' \
+                          -DFFMPEG_LIBRARIES='avformat;avcodec;avutil;avdevice;swscale;swresample;lzma;rt;theoradec;theora;theoraenc;vorbisenc;vorbisfile;vorbis;ogg;xvidcore;vpx;mp3lame;x264;openjpeg;openjpeg_JPWL' \
                           -DWITH_INSTALL_PORTABLE=ON \
-                          -DCMAKE_INSTALL_PREFIX=/usr/lib/python3.7/site-packages && \
+                          -DCMAKE_INSTALL_PREFIX=/usr/lib/python3.5/site-packages && \
     make -j 4 && \
     make install && \
-    rm -rf /tmp/blender-2.80 /tmp/build
+    rm -rf /tmp/blender-2.79b /tmp/build
 
-RUN apt-get install -y ffmpeg python3-pip
-RUN python3.7 -m pip install pip
-RUN python3.7 -m pip install -U numpy tqdm
-
-ENV PYTHONPATH /usr/lib/python3.7/site-packages
+ENV PYTHONPATH /usr/lib/python3.5/site-packages
 ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/mesa:/opt/lib/alembic-1.7.1/lib:/opt/lib/osl-1.7.5/lib:/opt/lib/osd-3.1.1/lib:/opt/lib/oiio-1.7.15/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64
 
-#WITH_IMAGE_OPENJPEG         ON
+
+RUN apt update -y
+RUN apt install python3-pip ffmpeg -y
+RUN pip3 install numpy tqdm
