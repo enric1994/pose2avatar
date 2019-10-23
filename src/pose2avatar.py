@@ -9,12 +9,11 @@ import math
 import os
 from tqdm import tqdm
 
-version = '4.4'
-minor = '0'
-model = 'claudia'
-keypoints = 'enric_hand'
-render_video = False
-render_hands = True
+version = '0.4'
+minor = '2'
+model = 'steve'
+keypoints = 'enric_hand3'
+render_video = True
 
 base_path = '/pose2avatar'
 
@@ -27,8 +26,7 @@ downsample_ratio = 4
 keypoints_resize = 70
 
 
-total_frames = 20
-#utils.get_total_frames(keypoints_path)
+total_frames = 50#utils.get_total_frames(keypoints_path)
 
 print('''
 Starting experiment: {}
@@ -43,8 +41,6 @@ def main():
 		frame *=4
 		bpy.context.scene.frame_set(frame)
 		pose_positions = np.array(utils.get_pose_bones_positions_at_frame(keypoints_path, frame))/keypoints_resize
-		if render_hands:
-			left_hand_positions, right_hand_positions = np.array(utils.get_hand_bones_positions_at_frame(keypoints_path, frame))/keypoints_resize
 
 		for bone in pose_bones:
 			bpy.ops.object.mode_set(mode='OBJECT')
@@ -52,20 +48,6 @@ def main():
 			empty = bpy.data.objects[pose_bones[bone]]
 			empty.location = pose_positions[bone*3], 0, -pose_positions[bone*3 + 1]
 			obj.keyframe_insert(data_path='location',index = -1, frame=frame)
-		if render_hands:
-			for bone in left_hand_bones:
-				bpy.ops.object.mode_set(mode='OBJECT')
-				obj = bpy.context.scene.objects[left_hand_bones[bone]]
-				empty = bpy.data.objects[left_hand_bones[bone]]
-				empty.location = left_hand_positions[bone*3], 0, -left_hand_positions[bone*3 + 1]
-				obj.keyframe_insert(data_path='location',index = -1, frame=frame)
-			
-			for bone in right_hand_bones:
-				bpy.ops.object.mode_set(mode='OBJECT')
-				obj = bpy.context.scene.objects[right_hand_bones[bone]]
-				empty = bpy.data.objects[right_hand_bones[bone]]
-				empty.location = right_hand_positions[bone*3], 0, -right_hand_positions[bone*3 + 1]
-				obj.keyframe_insert(data_path='location',index = -1, frame=frame)
 
 	if render_video:
 		print('Rendering frames...')
