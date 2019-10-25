@@ -9,8 +9,8 @@ import math
 import os
 from tqdm import tqdm
 
-version = '0.4'
-minor = '2'
+version = '0.5'
+minor = '3'
 model = 'steve'
 keypoints = 'enric_hand3'
 render_video = True
@@ -26,7 +26,7 @@ downsample_ratio = 4
 keypoints_resize = 70
 
 
-total_frames = 50#utils.get_total_frames(keypoints_path)
+total_frames = 100#utils.get_total_frames(keypoints_path)
 
 print('''
 Starting experiment: {}
