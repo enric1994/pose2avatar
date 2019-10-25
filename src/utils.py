@@ -5,6 +5,7 @@ import json
 import os
 import io
 import sys
+import numpy as np
 
 def remove_startup_cube():
 	objs = bpy.data.objects
@@ -33,3 +34,15 @@ def save_project(path='/pose2avatar/output.blend'):
 
 def gen_video(input_images, output_video):
 		os.system('ffmpeg -y -framerate 30 -i {}/%06d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p {}'.format(input_images, output_video))
+
+#get_undefined_keypoints('/pose2avatar/data/keypoints/enric_hand3', pose_bones, 400, 100)
+def get_undefined_keypoints(keypoints_path, pose_bones, total_frames, ignore_th):
+		
+	zerok=np.zeros(len(pose_bones))
+	for frame in range(0,total_frames):
+		keypoints = get_pose_bones_positions_at_frame(keypoints_path, frame)
+		for i, keypoint in enumerate(np.take(keypoints,np.arange(0,len(zerok) * 3,3))):
+			if keypoint == 0:
+				zerok[i]+=1
+	return np.argwhere(zerok > ignore_th)
+	
