@@ -9,10 +9,10 @@ import math
 import os
 from tqdm import tqdm
 
-version = '0.5'
-minor = '3'
-model = 'steve'
-keypoints = 'enric_hand3'
+version = '1.3'
+minor = '0'
+model = 'skellington'
+keypoints = 'weather'
 render_video = True
 
 base_path = '/pose2avatar'
@@ -26,7 +26,7 @@ downsample_ratio = 4
 keypoints_resize = 70
 
 
-total_frames = 100#utils.get_total_frames(keypoints_path)
+total_frames = 200#utils.get_total_frames(keypoints_path)
 
 print('''
 Starting experiment: {}
@@ -46,8 +46,15 @@ def main():
 			bpy.ops.object.mode_set(mode='OBJECT')
 			obj = bpy.context.scene.objects[pose_bones[bone]]
 			empty = bpy.data.objects[pose_bones[bone]]
-			empty.location = pose_positions[bone*3], 0, -pose_positions[bone*3 + 1]
+			empty.location = pose_positions[bone*3], empty.location.y, -pose_positions[bone*3 + 1]
 			obj.keyframe_insert(data_path='location',index = -1, frame=frame)
+		
+		# Move background
+		background = bpy.context.scene.objects['background']
+		# background = bpy.data.objects['background']
+		# import pdb;pdb.set_trace()
+		background.location = 1.5 - pose_positions[9 * 3]/10, 0.4, 1.1
+		background.keyframe_insert(data_path='location',index = -1, frame=frame)
 
 	if render_video:
 		print('Rendering frames...')
