@@ -1,5 +1,3 @@
-#./build/examples/openpose/openpose.bin --write_video /openpose/project/data/andrea_hand.avi --video /openpose/project/data/andrea_clip.mp4 --write_json /openpose/project/data/keypoints/andrea_hand/ --face --hand --hand_scale_number 6 --hand_scale_range 0.4
-
 version: '2.3'
 
 services:
@@ -11,11 +9,8 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile.openpose
-    environment:
-      - DISPLAY=unix$DISPLAY
     volumes:
       - ../:/openpose/project
-      - /tmp/.X11-unix:/tmp/.X11-unix
     runtime: nvidia
     command: tail /dev/null -f
 
@@ -26,10 +21,7 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile.pose2avatar
-    environment:
-      - DISPLAY=unix$DISPLAY
     volumes:
       - ../:/pose2avatar
-      - /tmp/.X11-unix:/tmp/.X11-unix
     runtime: nvidia
     command: tail /dev/null -f
