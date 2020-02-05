@@ -16,7 +16,7 @@ from tqdm import tqdm
 keypoints_path = '/pose2avatar/data/keypoints'
 project_path = '/pose2avatar/data/blender/example.blend'
 frames_output = '/pose2avatar/data/frames'
-video_output = '/pose2avatar/data/video_output'
+video_output = '/pose2avatar/data/videos'
 video_name = 'example.mp4'
 output_project_path = '/pose2avatar/projects/output_example.blend'
 
