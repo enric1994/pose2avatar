@@ -2,9 +2,9 @@
 
 ![Hits](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fgithub.com%2Fenric1994%2Fpose2avatar)
 
-<img src="figures/1.png" width="40%">
+<img src="figures/1.png" width="100%">
 
-<img src="figures/2.png" width="40%">
+<img src="figures/2.png" width="100%">
 
 ### Dependencies
 * [Docker](https://gist.github.com/enric1994/3b5c20ddb2b4033c4498b92a71d909da)
