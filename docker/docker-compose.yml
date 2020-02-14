@@ -17,7 +17,7 @@ services:
   pose2avatar:
     image: pose2avatar
     container_name: pose2avatar
-    working_dir: /pose2avatar
+    working_dir: /pose2avatar/src
     build:
       context: ../
       dockerfile: docker/Dockerfile.pose2avatar
