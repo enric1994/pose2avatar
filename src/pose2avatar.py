@@ -18,7 +18,7 @@ project_path = '/pose2avatar/data/blender/example.blend'
 frames_output = '/pose2avatar/data/frames'
 video_output = '/pose2avatar/data/videos'
 video_name = 'example.mp4'
-output_project_path = '/pose2avatar/projects/output_example.blend'
+output_project_path = '/pose2avatar/data/projects/output_example.blend'
 
 bpy.ops.wm.open_mainfile(filepath=project_path)
 
@@ -43,20 +43,21 @@ def main():
 			empty.location = pose_positions[bone*3], empty.location.y, -pose_positions[bone*3 + 1]
 			obj.keyframe_insert(data_path='location',index = -1, frame=frame)
 
-	if render_video:
-		print('Rendering frames...')
-		for i in tqdm(range(0,total_frames)):
-			bpy.context.scene.frame_current = i
-			bpy.context.scene.render.image_settings.file_format = 'PNG'
-			bpy.context.scene.render.filepath = os.path.join(frames_output, str(i).zfill(6))
-			bpy.ops.render.render(write_still=True)
+	
+	print('Rendering frames to {}'.format(frames_output))
+	for i in tqdm(range(0,total_frames)):
+		bpy.context.scene.frame_current = i
+		bpy.context.scene.render.image_settings.file_format = 'PNG'
+		bpy.context.scene.render.filepath = os.path.join(frames_output, str(i).zfill(6))
+		bpy.ops.render.render(write_still=True)
 
-		print('Rendering video...')
-		utils.gen_video(
-			video_output,
-			os.path.join(video_output,video_name)
-		)
+	print('Rendering video to {}'.format(os.path.join(video_output,video_name)))
+	utils.gen_video(
+		frames_output,
+		os.path.join(video_output,video_name)
+	)
 
+	print('Saving project to {}'.format(output_project_path))
 	utils.save_project(output_project_path)
 
 

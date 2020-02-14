@@ -33,9 +33,8 @@ def save_project(path='/pose2avatar/output.blend'):
 	bpy.ops.wm.save_as_mainfile(filepath=path)
 
 def gen_video(input_images, output_video):
-		os.system('ffmpeg -y -framerate 30 -i {}/%06d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p {}'.format(input_images, output_video))
+		os.system('ffmpeg -loglevel panic -y -framerate 30 -i {}/%06d.png -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p {}'.format(input_images, output_video))
 
-#get_undefined_keypoints('/pose2avatar/data/keypoints/enric_hand3', pose_bones, 400, 100)
 def get_undefined_keypoints(keypoints_path, pose_bones, total_frames, ignore_th):
 		
 	zerok=np.zeros(len(pose_bones))
