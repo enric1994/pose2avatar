@@ -1,10 +1,7 @@
 *.json
 *.avi
 *.mov
-*.mp4
 *.png
 *.pyc
-
+__pycache__
 *.blend1
-
-test.blend
